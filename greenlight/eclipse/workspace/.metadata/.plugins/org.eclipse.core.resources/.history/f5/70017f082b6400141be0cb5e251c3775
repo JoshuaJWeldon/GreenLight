@@ -1,0 +1,87 @@
+package greenlight;
+
+import javax.swing.*; 
+
+import java.awt.*; 
+
+public class Gui {
+	
+	public startGui(String[] args) {  
+		new gui(); } 
+	
+	public gui() { JFrame guiFrame = new JFrame();  //make sure the program exits when the frame closes 
+	
+	guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); guiFrame.setTitle("Green Light");
+	guiFrame.setSize(300,250);  //This will center the JFrame in the middle of the screen 
+	guiFrame.setLocationRelativeTo(null);  //Options for the JComboBox  
+	String[] userType = {"Doctor", "User", "Venue"}; 
+	//Options for the JList 
+	
+	String[] vegOptions = {"Asparagus", "Beans", "Broccoli", "Cabbage" , "Carrot", "Celery", "Cucumber", "Leek", "Mushroom" , "Pepper", "Radish", "Shallot", "Spinach", "Swede" , "Turnip"};  //The first JPanel contains a JLabel and JCombobox 
+	final JPanel comboPanel = new JPanel(); 
+	JLabel comboLbl = new JLabel("What type of user are you:"); 
+	JComboBox typeBox = new JComboBox(userType);  
+      //String doctor  = "Doctor"; 
+	
+	
+	
+	
+    	
+	comboPanel.add(comboLbl); 
+	comboPanel.add(typeBox);  //Create the second JPanel. Add a JLabel and JList and 
+	//make use the JPanel is not visible. 
+	
+	 
+	
+	 
+//	JLabel listLbl = new JLabel("Vegetables:"); 
+//	JList vegs = new JList(vegOptions); 
+//	vegs.setLayoutOrientation(JList.HORIZONTAL_WRAP); 
+	
+//  TODO
+//	final JPanel listPanel = new JPanel();
+//	listPanel.add(listLbl); 
+//	listPanel.add(vegs);
+//	listPanel.setVisible(false);
+//	listPanel.setVisible(!listPanel.isVisible()); 
+//	comboPanel.setVisible(!comboPanel.isVisible());
+	
+	JButton getTypeButton = new JButton( "Enter");
+	 
+	getTypeButton.addActionListener(new ActionListener() { @Override 
+		
+		public void actionPerformed(ActionEvent event) { 
+		//When the fruit of veg button is pressed 
+		//the setVisible value of the listPanel and
+		//comboPanel is switched from true to  
+		//value or vice versa. 
+		
+		switch ((String)typeBox.getSelectedItem()) {
+		case "Doctor":
+			System.out.println("Doc");
+			break;
+
+		case "User":
+			
+			break;
+
+		case "Venue":
+			
+			break;
+
+		default:
+			break;
+		}
+		
+		
+		  } });  
+	//The JFrame uses the BorderLayout layout manager. 
+	//Put the two JPanels and JButton in different areas. 
+	
+	guiFrame.add(comboPanel, BorderLayout.NORTH); 
+//	guiFrame.add(listPanel, BorderLayout.CENTER); 
+	guiFrame.add(getTypeButton,BorderLayout.SOUTH);  //make sure the JFrame is visible 
+	guiFrame.setVisible(true); }  
+	
+	
+	}

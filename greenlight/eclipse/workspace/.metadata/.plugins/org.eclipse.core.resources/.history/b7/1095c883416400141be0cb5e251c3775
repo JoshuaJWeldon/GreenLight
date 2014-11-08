@@ -1,0 +1,46 @@
+package greenlight;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class DatabaseControler {
+	
+	Connection connection;
+	ResultSet  resultSet;
+	
+	public DatabaseControler(){
+		String url = null;
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			url = "jdbc:mysql://173.194.252.106:3306?user=root";
+			
+	
+			connection = DriverManager.getConnection(url,"root","StrongHtr&7");
+			resultSet = connection.createStatement().executeQuery("use greenlight");
+	
+			resultSet.close();
+		}
+		catch(SQLException e){System.err.println("DatabaseControler.DatabaseControler could not connect to database");}
+		catch(ClassNotFoundException c){System.err.println("DatabaseControler.DatabaseControler could not find class");}
+		
+	}
+	
+	public void testMethod() throws ClassNotFoundException, SQLException{
+		// TODO Auto-generated method stub
+		
+
+		resultSet = connection.createStatement().executeQuery("select * from doctors where certified = 'No'");
+
+		while(resultSet.next()){
+		int    id = resultSet.getInt("id");
+		String fn = resultSet.getString("first_name");
+		String ln = resultSet.getString("last_name");
+		String ct = resultSet.getString("certified");
+
+		System.out.println("id: " + id + " | fn: " + fn + " | ln: "+ ln + " | ct: " + ct);
+		}
+	}
+}
