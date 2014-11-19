@@ -48,7 +48,7 @@ public class DatabaseControler {
 		int    id = resultSet.getInt("id");
 		String fn = resultSet.getString("firstname");
 		String ln = resultSet.getString("lastname");
-		String ct = resultSet.getString("phone");
+		String ct = resultSet.getString("phonenumber");
 
 		System.out.println("id: " + id + " | fn: " + fn + " | ln: "+ ln + " | ct: " + ct);
 		}

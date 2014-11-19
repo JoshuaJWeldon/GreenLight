@@ -321,7 +321,7 @@ public class Driver {
 					frame.setVisible(true);
 				}
 				else{
-					if(dbms.runInsertQuery("insert into users (firstname,lastname,phone) values ('"+firstname.getText()+"','"+lastname.getText()+"','"+phone.getText()+"')")){
+					if(dbms.runInsertQuery("insert into users (firstname,lastname,phonenumber) values ('"+firstname.getText()+"','"+lastname.getText()+"','"+phone.getText()+"')")){
 						JLabel success = new JLabel("Sucess");					
 						success.setBounds(30, 295, 180, 20);
 						panel.add(success);
