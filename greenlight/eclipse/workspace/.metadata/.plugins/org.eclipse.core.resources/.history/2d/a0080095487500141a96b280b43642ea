@@ -1,0 +1,11 @@
+public class test {   
+	
+	public static void main(String[] args) {  
+	
+		String tick = "tick,";
+		
+		System.out.println(tick.substring(0, tick.length()));
+		
+	}  
+	
+}

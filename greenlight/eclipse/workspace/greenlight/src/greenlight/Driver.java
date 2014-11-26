@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 public class Driver {
 	
@@ -13,22 +12,16 @@ public class Driver {
 	public static final String USER   = "User";
 	public static final String VENUE  = "Venue";
 	
-	private DatabaseControler dbms;
+	private DatabaseController database;
 	
 	private JFrame frame;
 	private JPanel panel;
 	
 	public Driver(){
 		
-		//TODO look and feel
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "WikiTeX");
-		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}
-		catch (Exception e) {System.out.println("Driver.Driver - look and feel");}
+		database  = new OracleController();
 		
-		dbms  = new DatabaseControler();
-		
-		frame = new JFrame("Green Light"); 
+		frame = new JFrame("GreenLight"); 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300,450);  
 		frame.setLocationRelativeTo(null);
@@ -45,12 +38,6 @@ public class Driver {
 		Driver driver = new Driver();
 	
 		driver.createWelcomePanel();
-		
-		try{driver.dbms.testMethod();} 
-		catch(ClassNotFoundException c){}
-		catch(SQLException s){}
-		
-	
 	}
 	
 	private void createVenuePanel() {
@@ -270,7 +257,6 @@ public class Driver {
 	
 
 	private void createRegistrationPanel() {
-		// TODO Auto-generated method stub
 		
 		frame.remove(panel);
 		panel = new JPanel();
@@ -311,7 +297,6 @@ public class Driver {
 						lastname.getText().equals("") || 
 						phone.getText().equals("")
 						){
-					System.out.println("Did enter");//TODO
 					JLabel error = new JLabel("Please fill out all feilds");
 					error.setBounds(30, 250, 180, 40);
 					frame.remove(panel);
@@ -321,33 +306,85 @@ public class Driver {
 					frame.setVisible(true);
 				}
 				else{
-					if(dbms.runInsertQuery("insert into users (firstname,lastname,phone) values ('"+firstname.getText()+"','"+lastname.getText()+"','"+phone.getText()+"')")){
-						JLabel success = new JLabel("Sucess");					
-						success.setBounds(30, 295, 180, 20);
-						panel.add(success);
-						frame.add(panel);
-						panel.setVisible(true);
-						frame.setVisible(true);
-
-					}
+					String   table   = "users";
+					String[] columns = {"firstname", "lastname", "phone"};
+					String[] values  = {"'" + firstname.getText() + "'", "'" + lastname.getText() + "'", "'" + phone.getText() + "'"};
+					if(database.insert(table, columns, values))
+						createSuccessPanel();
 					else {
-						
-						JLabel error = new JLabel("Could not insert given infomation");
-						error.setBounds(30, 295, 180, 20);
-						panel.add(error);
-						frame.add(panel);
-						panel.setVisible(true);
-						frame.setVisible(true);
+						System.err.println("Driver.createRegistrationTable: error on insert");
+						createFailurePanel();
 					}
 					
 				}
 			}
+
+			
+
+			
 		});
 		
 		frame.add(panel);
 		panel.setVisible(true);
 		frame.setVisible(true);
 	
+	}
+	
+	private void createFailurePanel() {
+		frame.remove(panel);
+		panel = new JPanel();
+		
+		JButton home    = new JButton("");
+		JLabel  failure = new JLabel("Failure");
+
+		panel.setPreferredSize (new Dimension (240, 390));
+		panel.setLayout (null);
+		
+		home.setBounds      (220, 10, 10, 10);
+		failure.setBounds  (30,  15, 180, 50);
+		
+		panel.add(home);
+		panel.add(failure);
+		
+		home.addActionListener(new ActionListener() { 
+			@Override public void actionPerformed(ActionEvent event) { 
+				createWelcomePanel();
+			}
+		});
+		
+		frame.add(panel);
+		panel.setVisible(true);
+		frame.setVisible(true);
+		
+	}
+	
+	private void createSuccessPanel() {
+		
+		frame.remove(panel);
+		panel = new JPanel();
+		
+		JButton home    = new JButton("");
+		JLabel  success = new JLabel("Success");
+
+		panel.setPreferredSize (new Dimension (240, 390));
+		panel.setLayout (null);
+		
+		home.setBounds      (220, 10, 10, 10);
+		success.setBounds  (30,  15, 180, 50);
+		
+		panel.add(home);
+		panel.add(success);
+		
+		home.addActionListener(new ActionListener() { 
+			@Override public void actionPerformed(ActionEvent event) { 
+				createWelcomePanel();
+			}
+		});
+		
+		frame.add(panel);
+		panel.setVisible(true);
+		frame.setVisible(true);
+		
 	}
 	
 	private void createGetUserSettings() {
@@ -366,54 +403,52 @@ public class Driver {
 	}
 	
 	private void createWelcomePanel() {
-			
+		
 		frame.remove(panel);
 		panel = new JPanel();
 		
-		String[]  userTypes = {DOCTOR, USER, VENUE};
-		JLabel    label     = new JLabel("What kind of user are you: ");
-		JComboBox comboBox  = new JComboBox(userTypes);  
-		JButton   button      = new JButton( "Enter"); 
-		
+		JButton home   = new JButton("");
+		JButton user   = new JButton("User");
+		JButton doctor = new JButton("Doctor");
+		JButton venue  = new JButton("Venue");
+
 		panel.setPreferredSize (new Dimension (240, 390));
 		panel.setLayout (null);
 		
-		label.setBounds   (30, 50,  180, 50);
-		comboBox.setBounds(30, 110, 180, 50);
-		button.setBounds  (30, 275, 180, 50);
+		home.setBounds   (220, 10, 10, 10);
+		user.setBounds   (30,  15, 180, 50);
+		doctor.setBounds (30, 115, 180, 50);
+		venue.setBounds  (30, 215, 180, 50);
 		
+		panel.add(home);
+		panel.add(user);
+		panel.add(doctor);
+		panel.add(venue);
 		
-		panel.add(label); 
-		panel.add(comboBox);  
-		panel.add(button);
-		
-		button.addActionListener(new ActionListener() { 
-			@Override public void actionPerformed(ActionEvent event) {   
-				
-				switch ((String)comboBox.getSelectedItem()) {
-				
-				case DOCTOR:
-					
-					createDoctorPanel();
-					break;
-					
-				case USER:
-					
-					createUserPanel();
-					break;
-					
-				case VENUE:
-	
-					createVenuePanel();
-					break;
-
-				default:
-					System.exit(-1);
-					break;
-				}
+		home.addActionListener(new ActionListener() { 
+			@Override public void actionPerformed(ActionEvent event) { 
+				createWelcomePanel();
 			}
-		}); 
-	
+		});
+		
+		user.addActionListener(new ActionListener() { 
+			@Override public void actionPerformed(ActionEvent event) { 
+				createUserPanel();
+			}
+		});
+		
+		doctor.addActionListener(new ActionListener() { 
+			@Override public void actionPerformed(ActionEvent event) { 
+				createDoctorPanel();
+			}
+		});
+
+		venue.addActionListener(new ActionListener() { 
+			@Override public void actionPerformed(ActionEvent event) { 
+				createVenuePanel();
+			}
+		});
+		
 		frame.add(panel);
 		panel.setVisible(true);
 		frame.setVisible(true);

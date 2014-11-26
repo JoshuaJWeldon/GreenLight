@@ -1,0 +1,5 @@
+package greenlight;
+
+public abstract class DatabaseControler {
+
+}
