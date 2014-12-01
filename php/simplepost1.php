@@ -3,9 +3,19 @@
     <body>
 
         <?php
-            // define variables and set to empty values
-            $_POST["message"] = "hi";
-            echo $_POST["message"];
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                // if form has been posted process data
+                
+                // you dont need the addContact function you jsut need to put it in a new array
+                // and it doesnt make sense in this context so jsut do it here
+                // then used json_decode and json_decode to read/save your json in
+                // saveContact()
+                
+                session_start();
+                
+                $_SESSION['message'] = $_POST['message'];
+            }
+            
         ?>
 
 
